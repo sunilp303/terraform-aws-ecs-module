@@ -138,15 +138,15 @@ resource "aws_ecs_service" "this" {
   task_definition = var.create_task_definition ? aws_ecs_task_definition.this[0].arn : var.task_definition_arn
   desired_count   = var.desired_count
 
-  launch_type                        = length(var.capacity_provider_strategy) > 0 ? null : var.launch_type
-  platform_version                   = var.launch_type == "FARGATE" ? var.platform_version : null
-  scheduling_strategy                = var.scheduling_strategy
-  force_new_deployment               = var.force_new_deployment
-  wait_for_steady_state              = var.wait_for_steady_state
-  enable_execute_command             = var.enable_execute_command
-  health_check_grace_period_seconds  = var.health_check_grace_period_seconds
-  propagate_tags                     = var.propagate_tags
-  enable_ecs_managed_tags            = var.enable_ecs_managed_tags
+  launch_type                       = length(var.capacity_provider_strategy) > 0 ? null : var.launch_type
+  platform_version                  = var.launch_type == "FARGATE" ? var.platform_version : null
+  scheduling_strategy               = var.scheduling_strategy
+  force_new_deployment              = var.force_new_deployment
+  wait_for_steady_state             = var.wait_for_steady_state
+  enable_execute_command            = var.enable_execute_command
+  health_check_grace_period_seconds = var.health_check_grace_period_seconds
+  propagate_tags                    = var.propagate_tags
+  enable_ecs_managed_tags           = var.enable_ecs_managed_tags
 
   dynamic "capacity_provider_strategy" {
     for_each = var.capacity_provider_strategy
@@ -160,8 +160,8 @@ resource "aws_ecs_service" "this" {
   dynamic "network_configuration" {
     for_each = var.network_mode == "awsvpc" ? [1] : []
     content {
-      subnets          = var.subnet_ids
-      security_groups  = concat(
+      subnets = var.subnet_ids
+      security_groups = concat(
         var.create_security_group ? [aws_security_group.ecs_service[0].id] : [],
         var.security_group_ids
       )

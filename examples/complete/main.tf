@@ -2,6 +2,17 @@
 # Example: Complete Fargate ECS Service with ALB
 ##############################################################
 
+terraform {
+  required_version = ">= 1.3.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.0"
+    }
+  }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
@@ -42,7 +53,7 @@ data "aws_subnets" "private" {
 # ECS Module
 ##############################################################
 module "ecs" {
-  source = "../../"  # or "github.com/sunilp303/terraform-aws-ecs-module"
+  source = "../../" # or "github.com/sunilp303/terraform-aws-ecs-module"
 
   # Cluster
   cluster_name              = "${local.name}-cluster"
@@ -106,7 +117,7 @@ module "ecs" {
   desired_count                     = 2
   launch_type                       = "FARGATE"
   platform_version                  = "LATEST"
-  force_new_deployment               = true
+  force_new_deployment              = true
   health_check_grace_period_seconds = 30
   enable_execute_command            = true
 
@@ -116,8 +127,8 @@ module "ecs" {
   }
 
   # Networking
-  vpc_id         = data.aws_vpc.default.id
-  subnet_ids     = data.aws_subnets.private.ids
+  vpc_id           = data.aws_vpc.default.id
+  subnet_ids       = data.aws_subnets.private.ids
   assign_public_ip = false
 
   create_security_group = true
@@ -126,7 +137,7 @@ module "ecs" {
       from_port                    = 80
       to_port                      = 80
       protocol                     = "tcp"
-      referenced_security_group_id = null  # Replace with ALB SG id
+      referenced_security_group_id = null # Replace with ALB SG id
       cidr_ipv4                    = "10.0.0.0/8"
       description                  = "Allow HTTP from within VPC"
     }
@@ -151,11 +162,11 @@ module "ecs" {
   ]
 
   # Auto Scaling
-  enable_autoscaling         = true
-  autoscaling_min_capacity   = 1
-  autoscaling_max_capacity   = 10
-  autoscaling_cpu_target     = 70
-  autoscaling_memory_target  = 80
+  enable_autoscaling             = true
+  autoscaling_min_capacity       = 1
+  autoscaling_max_capacity       = 10
+  autoscaling_cpu_target         = 70
+  autoscaling_memory_target      = 80
   autoscaling_scale_in_cooldown  = 300
   autoscaling_scale_out_cooldown = 60
 
