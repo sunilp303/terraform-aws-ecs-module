@@ -244,4 +244,4 @@ MIT — see [LICENSE](LICENSE)
 
 ## Author
 
-[Sunil Pawar](https://github.com/sunilp303)
+[Sunil](https://github.com/sunilp303)
